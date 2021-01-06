@@ -1,6 +1,13 @@
 <template>
   <div id="home" class="wrapper">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
+    <tab-control
+      :titles="['流行', '新款', '精选']"
+      @tabClick="tabClick"
+      ref="tabControl1"
+      class="tab-control"
+      v-show="isTabFixed"
+    />
     <scroll
       class="content"
       ref="scroll"
@@ -9,520 +16,17 @@
       :pull-up-load="true"
       @pullingUp="loadMore"
     >
-      <home-swiper :banners="banners" />
+      <home-swiper :banners="banners" @swiperImageLoad="swiperImageLoad" />
       <recommend-view :recommends="recommends" />
       <feature-view />
       <tab-control
-        class="tab-control"
         :titles="['流行', '新款', '精选']"
         @tabClick="tabClick"
+        ref="tabControl2"
       />
       <goods-list :goods="showGoods" />
-      <ul>
-        <li>列表数据1</li>
-        <li>列表数据2</li>
-        <li>列表数据3</li>
-        <li>列表数据4</li>
-        <li>列表数据5</li>
-        <li>列表数据6</li>
-        <li>列表数据7</li>
-        <li>列表数据8</li>
-        <li>列表数据9</li>
-        <li>列表数据10</li>
-        <li>列表数据11</li>
-        <li>列表数据12</li>
-        <li>列表数据13</li>
-        <li>列表数据14</li>
-        <li>列表数据15</li>
-        <li>列表数据16</li>
-        <li>列表数据17</li>
-        <li>列表数据18</li>
-        <li>列表数据19</li>
-        <li>列表数据20</li>
-        <li>列表数据21</li>
-        <li>列表数据22</li>
-        <li>列表数据23</li>
-        <li>列表数据24</li>
-        <li>列表数据25</li>
-        <li>列表数据26</li>
-        <li>列表数据27</li>
-        <li>列表数据28</li>
-        <li>列表数据29</li>
-        <li>列表数据30</li>
-        <li>列表数据31</li>
-        <li>列表数据32</li>
-        <li>列表数据33</li>
-        <li>列表数据34</li>
-        <li>列表数据35</li>
-        <li>列表数据36</li>
-        <li>列表数据37</li>
-        <li>列表数据38</li>
-        <li>列表数据39</li>
-        <li>列表数据40</li>
-        <li>列表数据41</li>
-        <li>列表数据42</li>
-        <li>列表数据43</li>
-        <li>列表数据44</li>
-        <li>列表数据45</li>
-        <li>列表数据46</li>
-        <li>列表数据47</li>
-        <li>列表数据48</li>
-        <li>列表数据49</li>
-        <li>列表数据50</li>
-        <li>列表数据51</li>
-        <li>列表数据52</li>
-        <li>列表数据53</li>
-        <li>列表数据54</li>
-        <li>列表数据55</li>
-        <li>列表数据56</li>
-        <li>列表数据57</li>
-        <li>列表数据58</li>
-        <li>列表数据59</li>
-        <li>列表数据60</li>
-        <li>列表数据61</li>
-        <li>列表数据62</li>
-        <li>列表数据63</li>
-        <li>列表数据64</li>
-        <li>列表数据65</li>
-        <li>列表数据66</li>
-        <li>列表数据67</li>
-        <li>列表数据68</li>
-        <li>列表数据69</li>
-        <li>列表数据70</li>
-        <li>列表数据71</li>
-        <li>列表数据72</li>
-        <li>列表数据73</li>
-        <li>列表数据74</li>
-        <li>列表数据75</li>
-        <li>列表数据76</li>
-        <li>列表数据77</li>
-        <li>列表数据78</li>
-        <li>列表数据79</li>
-        <li>列表数据80</li>
-        <li>列表数据81</li>
-        <li>列表数据82</li>
-        <li>列表数据83</li>
-        <li>列表数据84</li>
-        <li>列表数据85</li>
-        <li>列表数据86</li>
-        <li>列表数据87</li>
-        <li>列表数据88</li>
-        <li>列表数据89</li>
-        <li>列表数据90</li>
-        <li>列表数据91</li>
-        <li>列表数据92</li>
-        <li>列表数据93</li>
-        <li>列表数据94</li>
-        <li>列表数据95</li>
-        <li>列表数据96</li>
-        <li>列表数据97</li>
-        <li>列表数据98</li>
-        <li>列表数据99</li>
-        <li>列表数据100</li>
-        <li>列表数据1</li>
-        <li>列表数据2</li>
-        <li>列表数据3</li>
-        <li>列表数据4</li>
-        <li>列表数据5</li>
-        <li>列表数据6</li>
-        <li>列表数据7</li>
-        <li>列表数据8</li>
-        <li>列表数据9</li>
-        <li>列表数据10</li>
-        <li>列表数据11</li>
-        <li>列表数据12</li>
-        <li>列表数据13</li>
-        <li>列表数据14</li>
-        <li>列表数据15</li>
-        <li>列表数据16</li>
-        <li>列表数据17</li>
-        <li>列表数据18</li>
-        <li>列表数据19</li>
-        <li>列表数据20</li>
-        <li>列表数据21</li>
-        <li>列表数据22</li>
-        <li>列表数据23</li>
-        <li>列表数据24</li>
-        <li>列表数据25</li>
-        <li>列表数据26</li>
-        <li>列表数据27</li>
-        <li>列表数据28</li>
-        <li>列表数据29</li>
-        <li>列表数据30</li>
-        <li>列表数据31</li>
-        <li>列表数据32</li>
-        <li>列表数据33</li>
-        <li>列表数据34</li>
-        <li>列表数据35</li>
-        <li>列表数据36</li>
-        <li>列表数据37</li>
-        <li>列表数据38</li>
-        <li>列表数据39</li>
-        <li>列表数据40</li>
-        <li>列表数据41</li>
-        <li>列表数据42</li>
-        <li>列表数据43</li>
-        <li>列表数据44</li>
-        <li>列表数据45</li>
-        <li>列表数据46</li>
-        <li>列表数据47</li>
-        <li>列表数据48</li>
-        <li>列表数据49</li>
-        <li>列表数据50</li>
-        <li>列表数据51</li>
-        <li>列表数据52</li>
-        <li>列表数据53</li>
-        <li>列表数据54</li>
-        <li>列表数据55</li>
-        <li>列表数据56</li>
-        <li>列表数据57</li>
-        <li>列表数据58</li>
-        <li>列表数据59</li>
-        <li>列表数据60</li>
-        <li>列表数据61</li>
-        <li>列表数据62</li>
-        <li>列表数据63</li>
-        <li>列表数据64</li>
-        <li>列表数据65</li>
-        <li>列表数据66</li>
-        <li>列表数据67</li>
-        <li>列表数据68</li>
-        <li>列表数据69</li>
-        <li>列表数据70</li>
-        <li>列表数据71</li>
-        <li>列表数据72</li>
-        <li>列表数据73</li>
-        <li>列表数据74</li>
-        <li>列表数据75</li>
-        <li>列表数据76</li>
-        <li>列表数据77</li>
-        <li>列表数据78</li>
-        <li>列表数据79</li>
-        <li>列表数据80</li>
-        <li>列表数据81</li>
-        <li>列表数据82</li>
-        <li>列表数据83</li>
-        <li>列表数据84</li>
-        <li>列表数据85</li>
-        <li>列表数据86</li>
-        <li>列表数据87</li>
-        <li>列表数据88</li>
-        <li>列表数据89</li>
-        <li>列表数据90</li>
-        <li>列表数据91</li>
-        <li>列表数据92</li>
-        <li>列表数据93</li>
-        <li>列表数据94</li>
-        <li>列表数据95</li>
-        <li>列表数据96</li>
-        <li>列表数据97</li>
-        <li>列表数据98</li>
-        <li>列表数据99</li>
-        <li>列表数据100</li>
-        <li>列表数据1</li>
-        <li>列表数据2</li>
-        <li>列表数据3</li>
-        <li>列表数据4</li>
-        <li>列表数据5</li>
-        <li>列表数据6</li>
-        <li>列表数据7</li>
-        <li>列表数据8</li>
-        <li>列表数据9</li>
-        <li>列表数据10</li>
-        <li>列表数据11</li>
-        <li>列表数据12</li>
-        <li>列表数据13</li>
-        <li>列表数据14</li>
-        <li>列表数据15</li>
-        <li>列表数据16</li>
-        <li>列表数据17</li>
-        <li>列表数据18</li>
-        <li>列表数据19</li>
-        <li>列表数据20</li>
-        <li>列表数据21</li>
-        <li>列表数据22</li>
-        <li>列表数据23</li>
-        <li>列表数据24</li>
-        <li>列表数据25</li>
-        <li>列表数据26</li>
-        <li>列表数据27</li>
-        <li>列表数据28</li>
-        <li>列表数据29</li>
-        <li>列表数据30</li>
-        <li>列表数据31</li>
-        <li>列表数据32</li>
-        <li>列表数据33</li>
-        <li>列表数据34</li>
-        <li>列表数据35</li>
-        <li>列表数据36</li>
-        <li>列表数据37</li>
-        <li>列表数据38</li>
-        <li>列表数据39</li>
-        <li>列表数据40</li>
-        <li>列表数据41</li>
-        <li>列表数据42</li>
-        <li>列表数据43</li>
-        <li>列表数据44</li>
-        <li>列表数据45</li>
-        <li>列表数据46</li>
-        <li>列表数据47</li>
-        <li>列表数据48</li>
-        <li>列表数据49</li>
-        <li>列表数据50</li>
-        <li>列表数据51</li>
-        <li>列表数据52</li>
-        <li>列表数据53</li>
-        <li>列表数据54</li>
-        <li>列表数据55</li>
-        <li>列表数据56</li>
-        <li>列表数据57</li>
-        <li>列表数据58</li>
-        <li>列表数据59</li>
-        <li>列表数据60</li>
-        <li>列表数据61</li>
-        <li>列表数据62</li>
-        <li>列表数据63</li>
-        <li>列表数据64</li>
-        <li>列表数据65</li>
-        <li>列表数据66</li>
-        <li>列表数据67</li>
-        <li>列表数据68</li>
-        <li>列表数据69</li>
-        <li>列表数据70</li>
-        <li>列表数据71</li>
-        <li>列表数据72</li>
-        <li>列表数据73</li>
-        <li>列表数据74</li>
-        <li>列表数据75</li>
-        <li>列表数据76</li>
-        <li>列表数据77</li>
-        <li>列表数据78</li>
-        <li>列表数据79</li>
-        <li>列表数据80</li>
-        <li>列表数据81</li>
-        <li>列表数据82</li>
-        <li>列表数据83</li>
-        <li>列表数据84</li>
-        <li>列表数据85</li>
-        <li>列表数据86</li>
-        <li>列表数据87</li>
-        <li>列表数据88</li>
-        <li>列表数据89</li>
-        <li>列表数据90</li>
-        <li>列表数据91</li>
-        <li>列表数据92</li>
-        <li>列表数据93</li>
-        <li>列表数据94</li>
-        <li>列表数据95</li>
-        <li>列表数据96</li>
-        <li>列表数据97</li>
-        <li>列表数据98</li>
-        <li>列表数据99</li>
-        <li>列表数据100</li>
-        <li>列表数据1</li>
-        <li>列表数据2</li>
-        <li>列表数据3</li>
-        <li>列表数据4</li>
-        <li>列表数据5</li>
-        <li>列表数据6</li>
-        <li>列表数据7</li>
-        <li>列表数据8</li>
-        <li>列表数据9</li>
-        <li>列表数据10</li>
-        <li>列表数据11</li>
-        <li>列表数据12</li>
-        <li>列表数据13</li>
-        <li>列表数据14</li>
-        <li>列表数据15</li>
-        <li>列表数据16</li>
-        <li>列表数据17</li>
-        <li>列表数据18</li>
-        <li>列表数据19</li>
-        <li>列表数据20</li>
-        <li>列表数据21</li>
-        <li>列表数据22</li>
-        <li>列表数据23</li>
-        <li>列表数据24</li>
-        <li>列表数据25</li>
-        <li>列表数据26</li>
-        <li>列表数据27</li>
-        <li>列表数据28</li>
-        <li>列表数据29</li>
-        <li>列表数据30</li>
-        <li>列表数据31</li>
-        <li>列表数据32</li>
-        <li>列表数据33</li>
-        <li>列表数据34</li>
-        <li>列表数据35</li>
-        <li>列表数据36</li>
-        <li>列表数据37</li>
-        <li>列表数据38</li>
-        <li>列表数据39</li>
-        <li>列表数据40</li>
-        <li>列表数据41</li>
-        <li>列表数据42</li>
-        <li>列表数据43</li>
-        <li>列表数据44</li>
-        <li>列表数据45</li>
-        <li>列表数据46</li>
-        <li>列表数据47</li>
-        <li>列表数据48</li>
-        <li>列表数据49</li>
-        <li>列表数据50</li>
-        <li>列表数据51</li>
-        <li>列表数据52</li>
-        <li>列表数据53</li>
-        <li>列表数据54</li>
-        <li>列表数据55</li>
-        <li>列表数据56</li>
-        <li>列表数据57</li>
-        <li>列表数据58</li>
-        <li>列表数据59</li>
-        <li>列表数据60</li>
-        <li>列表数据61</li>
-        <li>列表数据62</li>
-        <li>列表数据63</li>
-        <li>列表数据64</li>
-        <li>列表数据65</li>
-        <li>列表数据66</li>
-        <li>列表数据67</li>
-        <li>列表数据68</li>
-        <li>列表数据69</li>
-        <li>列表数据70</li>
-        <li>列表数据71</li>
-        <li>列表数据72</li>
-        <li>列表数据73</li>
-        <li>列表数据74</li>
-        <li>列表数据75</li>
-        <li>列表数据76</li>
-        <li>列表数据77</li>
-        <li>列表数据78</li>
-        <li>列表数据79</li>
-        <li>列表数据80</li>
-        <li>列表数据81</li>
-        <li>列表数据82</li>
-        <li>列表数据83</li>
-        <li>列表数据84</li>
-        <li>列表数据85</li>
-        <li>列表数据86</li>
-        <li>列表数据87</li>
-        <li>列表数据88</li>
-        <li>列表数据89</li>
-        <li>列表数据90</li>
-        <li>列表数据91</li>
-        <li>列表数据92</li>
-        <li>列表数据93</li>
-        <li>列表数据94</li>
-        <li>列表数据95</li>
-        <li>列表数据96</li>
-        <li>列表数据97</li>
-        <li>列表数据98</li>
-        <li>列表数据99</li>
-        <li>列表数据100</li>
-        <li>列表数据1</li>
-        <li>列表数据2</li>
-        <li>列表数据3</li>
-        <li>列表数据4</li>
-        <li>列表数据5</li>
-        <li>列表数据6</li>
-        <li>列表数据7</li>
-        <li>列表数据8</li>
-        <li>列表数据9</li>
-        <li>列表数据10</li>
-        <li>列表数据11</li>
-        <li>列表数据12</li>
-        <li>列表数据13</li>
-        <li>列表数据14</li>
-        <li>列表数据15</li>
-        <li>列表数据16</li>
-        <li>列表数据17</li>
-        <li>列表数据18</li>
-        <li>列表数据19</li>
-        <li>列表数据20</li>
-        <li>列表数据21</li>
-        <li>列表数据22</li>
-        <li>列表数据23</li>
-        <li>列表数据24</li>
-        <li>列表数据25</li>
-        <li>列表数据26</li>
-        <li>列表数据27</li>
-        <li>列表数据28</li>
-        <li>列表数据29</li>
-        <li>列表数据30</li>
-        <li>列表数据31</li>
-        <li>列表数据32</li>
-        <li>列表数据33</li>
-        <li>列表数据34</li>
-        <li>列表数据35</li>
-        <li>列表数据36</li>
-        <li>列表数据37</li>
-        <li>列表数据38</li>
-        <li>列表数据39</li>
-        <li>列表数据40</li>
-        <li>列表数据41</li>
-        <li>列表数据42</li>
-        <li>列表数据43</li>
-        <li>列表数据44</li>
-        <li>列表数据45</li>
-        <li>列表数据46</li>
-        <li>列表数据47</li>
-        <li>列表数据48</li>
-        <li>列表数据49</li>
-        <li>列表数据50</li>
-        <li>列表数据51</li>
-        <li>列表数据52</li>
-        <li>列表数据53</li>
-        <li>列表数据54</li>
-        <li>列表数据55</li>
-        <li>列表数据56</li>
-        <li>列表数据57</li>
-        <li>列表数据58</li>
-        <li>列表数据59</li>
-        <li>列表数据60</li>
-        <li>列表数据61</li>
-        <li>列表数据62</li>
-        <li>列表数据63</li>
-        <li>列表数据64</li>
-        <li>列表数据65</li>
-        <li>列表数据66</li>
-        <li>列表数据67</li>
-        <li>列表数据68</li>
-        <li>列表数据69</li>
-        <li>列表数据70</li>
-        <li>列表数据71</li>
-        <li>列表数据72</li>
-        <li>列表数据73</li>
-        <li>列表数据74</li>
-        <li>列表数据75</li>
-        <li>列表数据76</li>
-        <li>列表数据77</li>
-        <li>列表数据78</li>
-        <li>列表数据79</li>
-        <li>列表数据80</li>
-        <li>列表数据81</li>
-        <li>列表数据82</li>
-        <li>列表数据83</li>
-        <li>列表数据84</li>
-        <li>列表数据85</li>
-        <li>列表数据86</li>
-        <li>列表数据87</li>
-        <li>列表数据88</li>
-        <li>列表数据89</li>
-        <li>列表数据90</li>
-        <li>列表数据91</li>
-        <li>列表数据92</li>
-        <li>列表数据93</li>
-        <li>列表数据94</li>
-        <li>列表数据95</li>
-        <li>列表数据96</li>
-        <li>列表数据97</li>
-        <li>列表数据98</li>
-        <li>列表数据99</li>
-        <li>列表数据100</li>
-      </ul>
     </scroll>
     <back-top @click.native="backClick" v-show="isShowBackTop" />
-    <!-- <category /> -->
   </div>
 </template>
 
@@ -537,9 +41,8 @@ import GoodsList from "components/content/goods/GoodsList";
 import Scroll from "components/common/scroll/Scroll";
 import BackTop from "components/content/backTop/BackTop";
 
-// import Category from "../category/Category";
-
 import { getHomeMultidata, getHomeGoods } from "network/home";
+import { debounce } from "common/utils";
 
 export default {
   name: "Home",
@@ -550,7 +53,6 @@ export default {
     NavBar,
     TabControl,
     GoodsList,
-    // Category,
     Scroll,
     BackTop
   },
@@ -565,13 +67,23 @@ export default {
         sell: { page: 0, list: [] }
       },
       currentType: "pop",
-      isShowBackTop: false
+      isShowBackTop: false,
+      tabOffsetTop: 675,
+      isTabFixed: false,
+      saveY: 0
     };
   },
   computed: {
     showGoods() {
       return this.goods[this.currentType].list;
     }
+  },
+  activated() {
+    this.$refs.scroll.scrollTo(0, this.saveY, 0);
+    this.$refs.scroll.refresh();
+  },
+  deactivated() {
+    this.saveY = this.$refs.scroll.getScrollY();
   },
   created() {
     // 1.请求多个数据
@@ -580,6 +92,18 @@ export default {
     this.getHomeGoods("pop");
     this.getHomeGoods("new");
     this.getHomeGoods("sell");
+  },
+  mounted() {
+    // 1.监听item中图片加载完成
+    const refresh = debounce(this.$refs.scroll.refresh, 50);
+    this.$bus.$on("itemImageLoad", () => {
+      // this.$refs.scroll.refresh();
+      refresh();
+    });
+    // 2.获取tabControl的offsetTop
+    // this.tabOffsetTop = this.$refs.tabControl.offsetTop
+    // 所有的组件都有一个属性$el:用于获取组建中的元素
+    // console.log(this.$refs.tabControl.$el.offsetTop);
   },
   methods: {
     // 事件监听相关的方法
@@ -595,22 +119,30 @@ export default {
           this.currentType = "sell";
           break;
       }
+      this.$refs.tabControl1.currentIndex = index;
+      this.$refs.tabControl2.currentIndex = index;
     },
     backClick() {
       this.$refs.scroll.scrollTo(0, 0, 500);
       // console.log(this.$refs.scroll.message);
     },
     contentScroll(position) {
+      // 1.判断backtop是否显示
       this.isShowBackTop = -position.y >= 1000 ? true : false;
+      // 2.决定tabOffsetTop是否吸顶(position:fixed)
+      this.isTabFixed = -position.y >= this.tabOffsetTop ? true : false;
     },
     loadMore() {
       this.getHomeGoods(this.currentType);
       this.$refs.scroll.scroll.refresh();
     },
+    swiperImageLoad() {
+      this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop;
+    },
     // 网络请求相关的方法
     getHomeMultidata() {
       getHomeMultidata().then(res => {
-        console.log(res);
+        // console.log(res);
         // this.result = res;
         this.banners = res.data.banner.list;
         this.recommends = res.data.recommend.list;
@@ -621,6 +153,9 @@ export default {
       getHomeGoods(type, page).then(res => {
         this.goods[type].list.push(...res.data.list);
         this.goods[type].page += 1;
+
+        // 完成上拉加载更多
+        this.$refs.scroll.finishPullUp();
       });
     }
   }
@@ -635,22 +170,22 @@ export default {
 .home-nav {
   background-color: var(--color-tint);
   color: white;
-  position: fixed;
+  /* 在使用浏览器原生滚动时为了让导航不跟随一起滚动时采用的属性 */
+  /* position: fixed;
   left: 0;
   right: 0;
   top: 0;
-  z-index: 9;
-}
-.tab-control {
-  position: sticky;
-  top: 44px;
-  z-index: 9;
+  z-index: 9; */
 }
 .content {
   overflow: hidden;
   position: absolute;
   top: 44px;
   bottom: 49px;
+}
+.tab-control {
+  position: relative;
+  z-index: 9;
 }
 /* 使用计算属性 */
 /* .content {
