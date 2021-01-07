@@ -1,10 +1,13 @@
 <template>
   <div id="detail">
     <detail-nav-bar class="detail-nav" />
-    <scroll class="content">
+    <scroll class="content" ref="scroll">
       <detail-swiper :top-images="topImages" />
       <detail-base-info :goods="goods" />
       <detail-shop-info :shop="shop" />
+      <detail-goods-info :detail-info="detailInfo" @imageLoad="imageLoad" />
+      <detail-param-info :param-info="paramInfo" />
+      <detail-comment-info :detail-comment-info="commentInfo" />
     </scroll>
   </div>
 </template>
@@ -14,10 +17,13 @@ import DetailNavBar from "./childComps/DetailNavBar";
 import DetailSwiper from "./childComps/DetailSwiper";
 import DetailBaseInfo from "./childComps/DetailBaseInfo";
 import DetailShopInfo from "./childComps/DetailShopInfo";
+import DetailGoodsInfo from "./childComps/DetailGoodsInfo";
+import DetailParamInfo from "./childComps/DetailParamInfo";
+import DetailCommentInfo from "./childComps/DetailCommentInfo";
 
 import Scroll from "components/common/scroll/Scroll";
 
-import { getDetail, Goods, Shop } from "network/detail";
+import { getDetail, Goods, Shop, GoodsParams } from "network/detail";
 export default {
   name: "Detail",
   components: {
@@ -25,6 +31,9 @@ export default {
     DetailSwiper,
     DetailBaseInfo,
     DetailShopInfo,
+    DetailGoodsInfo,
+    DetailParamInfo,
+    DetailCommentInfo,
     Scroll
   },
   data() {
@@ -33,7 +42,10 @@ export default {
       res: null,
       topImages: [],
       goods: {},
-      shop: {}
+      shop: {},
+      detailInfo: {},
+      paramInfo: {},
+      commentInfo: {}
     };
   },
   created() {
@@ -56,7 +68,24 @@ export default {
 
       // 3.创建店铺信息对象
       this.shop = new Shop(data.shopInfo);
+
+      // 4.获取商品详细信息
+      this.detailInfo = data.detailInfo;
+      // 5.获取参数信息
+      this.paramInfo = new GoodsParams(
+        data.itemParams.info,
+        data.itemParams.rule
+      );
+      // 6.获取评论信息
+      if (data.rate.cRate !== 0) {
+        this.commentInfo = data.rate.list[0];
+      }
     });
+  },
+  methods: {
+    imageLoad() {
+      this.$refs.scroll.refresh();
+    }
   }
 };
 </script>
@@ -65,11 +94,6 @@ export default {
 #detail {
   position: relative;
   height: 100vh;
-  z-index: 9;
-  background-color: #fff;
-}
-.detail-nav {
-  position: relative;
   z-index: 9;
   background-color: #fff;
 }
