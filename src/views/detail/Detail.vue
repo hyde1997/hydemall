@@ -5,9 +5,10 @@
       <detail-swiper :top-images="topImages" />
       <detail-base-info :goods="goods" />
       <detail-shop-info :shop="shop" />
-      <detail-goods-info :detail-info="detailInfo" @imageLoad="imageLoad" />
+      <detail-goods-info :detail-info="detailInfo" @imageLoad="itemImageLoad" />
       <detail-param-info :param-info="paramInfo" />
-      <detail-comment-info :detail-comment-info="commentInfo" />
+      <detail-comment-info :comment-info="commentInfo" />
+      <goods-list :goods="recommends" />
     </scroll>
   </div>
 </template>
@@ -21,9 +22,20 @@ import DetailGoodsInfo from "./childComps/DetailGoodsInfo";
 import DetailParamInfo from "./childComps/DetailParamInfo";
 import DetailCommentInfo from "./childComps/DetailCommentInfo";
 
+import GoodsList from "components/content/goods/GoodsList";
+
 import Scroll from "components/common/scroll/Scroll";
 
-import { getDetail, Goods, Shop, GoodsParams } from "network/detail";
+import { debounce } from "common/utils";
+import { itemListenerMixin } from "common/mixin";
+
+import {
+  getDetail,
+  Goods,
+  Shop,
+  GoodsParams,
+  getRecommend
+} from "network/detail";
 export default {
   name: "Detail",
   components: {
@@ -34,8 +46,10 @@ export default {
     DetailGoodsInfo,
     DetailParamInfo,
     DetailCommentInfo,
+    GoodsList,
     Scroll
   },
+  mixins: [itemListenerMixin],
   data() {
     return {
       iid: null,
@@ -45,7 +59,8 @@ export default {
       shop: {},
       detailInfo: {},
       paramInfo: {},
-      commentInfo: {}
+      commentInfo: {},
+      recommends: []
     };
   },
   created() {
@@ -81,10 +96,19 @@ export default {
         this.commentInfo = data.rate.list[0];
       }
     });
+
+    // 3.请求推荐数据
+    getRecommend().then(res => {
+      this.recommends = res.data.list;
+    });
+  },
+  mounted() {},
+  destroyed() {
+    this.$bus.$off("itemImageLoad", this.itemImgListener);
   },
   methods: {
-    imageLoad() {
-      this.$refs.scroll.refresh();
+    itemImageLoad() {
+      this.newRefresh();
     }
   }
 };
@@ -99,5 +123,10 @@ export default {
 }
 .content {
   height: calc(100% - 44px);
+}
+.detail-nav {
+  position: relative;
+  z-index: 9;
+  background-color: #fff;
 }
 </style>
