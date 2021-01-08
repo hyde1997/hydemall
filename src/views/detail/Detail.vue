@@ -1,15 +1,22 @@
 <template>
   <div id="detail">
-    <detail-nav-bar class="detail-nav" />
-    <scroll class="content" ref="scroll">
+    <detail-nav-bar class="detail-nav" @titleClick="titleClick" ref="nav" />
+    <scroll
+      class="content"
+      ref="scroll"
+      :probe-type="3"
+      @scroll="contentScroll"
+    >
       <detail-swiper :top-images="topImages" />
       <detail-base-info :goods="goods" />
       <detail-shop-info :shop="shop" />
       <detail-goods-info :detail-info="detailInfo" @imageLoad="itemImageLoad" />
-      <detail-param-info :param-info="paramInfo" />
-      <detail-comment-info :comment-info="commentInfo" />
-      <goods-list :goods="recommends" />
+      <detail-param-info :param-info="paramInfo" ref="params" />
+      <detail-comment-info :comment-info="commentInfo" ref="comment" />
+      <goods-list :goods="recommends" ref="recommend" />
     </scroll>
+    <back-top @click.native="backClick" v-show="isShowBackTop" />
+    <detail-bottom-bar />
   </div>
 </template>
 
@@ -21,13 +28,14 @@ import DetailShopInfo from "./childComps/DetailShopInfo";
 import DetailGoodsInfo from "./childComps/DetailGoodsInfo";
 import DetailParamInfo from "./childComps/DetailParamInfo";
 import DetailCommentInfo from "./childComps/DetailCommentInfo";
+import DetailBottomBar from "./childComps/DetailBottomBar";
 
 import GoodsList from "components/content/goods/GoodsList";
 
 import Scroll from "components/common/scroll/Scroll";
 
 import { debounce } from "common/utils";
-import { itemListenerMixin } from "common/mixin";
+import { itemListenerMixin, backTopMixin } from "common/mixin";
 
 import {
   getDetail,
@@ -46,10 +54,11 @@ export default {
     DetailGoodsInfo,
     DetailParamInfo,
     DetailCommentInfo,
+    DetailBottomBar,
     GoodsList,
     Scroll
   },
-  mixins: [itemListenerMixin],
+  mixins: [itemListenerMixin, backTopMixin],
   data() {
     return {
       iid: null,
@@ -60,7 +69,10 @@ export default {
       detailInfo: {},
       paramInfo: {},
       commentInfo: {},
-      recommends: []
+      recommends: [],
+      themeTopYs: [],
+      getThemeTopY: null,
+      currentIndex: 0
     };
   },
   created() {
@@ -95,20 +107,83 @@ export default {
       if (data.rate.cRate !== 0) {
         this.commentInfo = data.rate.list[0];
       }
+      // 第一次：这里值不对的原因：this.$refs.params.$el没有渲染
+      // this.themeTopYs = [];
+      // this.themeTopYs.push(0);
+      // this.themeTopYs.push(this.$refs.params.$el.offsetTop);
+      // this.themeTopYs.push(this.$refs.comment.$el.offsetTop);
+      // this.themeTopYs.push(this.$refs.recommend.$el.offsetTop);
+      // console.log(this.themeTopYs);
+      // 第二次：图片没有计算在内
+      // 等待界面全部渲染结束之后会调用的一个API：offsetTop
+      // offsetTop值不对的时候一般都是因为图片
+      // this.$nextTick(() => {
+      //   this.themeTopYs = [];
+      //   this.themeTopYs.push(0);
+      //   this.themeTopYs.push(this.$refs.params.$el.offsetTop);
+      //   this.themeTopYs.push(this.$refs.comment.$el.offsetTop);
+      //   this.themeTopYs.push(this.$refs.recommend.$el.offsetTop);
+      //   console.log(this.themeTopYs);
+      // });
     });
 
     // 3.请求推荐数据
     getRecommend().then(res => {
       this.recommends = res.data.list;
     });
+    // 4.给getThemeTopY赋值(对复制的操作进行防抖)
+    // 为什么用不了？
+    // this.getThemeTopY = debounce(() => {});
   },
   mounted() {},
+  updated() {},
   destroyed() {
     this.$bus.$off("itemImageLoad", this.itemImgListener);
   },
   methods: {
     itemImageLoad() {
       this.newRefresh();
+      this.themeTopYs = [];
+      this.themeTopYs.push(0);
+      this.themeTopYs.push(this.$refs.params.$el.offsetTop - 44);
+      this.themeTopYs.push(this.$refs.comment.$el.offsetTop - 44);
+      this.themeTopYs.push(this.$refs.recommend.$el.offsetTop - 44);
+      this.themeTopYs.push(Number.MAX_VALUE);
+
+      console.log(this.themeTopYs);
+    },
+    titleClick(index) {
+      // console.log(index);
+      this.$refs.scroll.scrollTo(0, -this.themeTopYs[index], 200);
+    },
+    contentScroll(position) {
+      // 1.获取y值
+      const positionY = -position.y;
+      // 2.将positionY与主题中的值进行对比
+      let length = this.themeTopYs.length;
+      for (let i = 0; i < length - 1; i++) {
+        if (
+          this.currentIndex !== i &&
+          positionY >= this.themeTopYs[i] &&
+          positionY < this.themeTopYs[i + 1]
+        ) {
+          this.currentIndex = i;
+          this.$refs.nav.currentIndex = this.currentIndex;
+        }
+
+        // if (
+        //   this.currentIndex !== i &&
+        //   ((i < length - 1 &&
+        //     positionY >= this.themeTopYs[i] &&
+        //     positionY < this.themeTopYs[i + 1]) ||
+        //     (i === length - 1 && positionY >= this.themeTopYs[i]))
+        // ) {
+        //   this.currentIndex = i;
+        //   this.$refs.nav.currentIndex = this.currentIndex;
+        // }
+      }
+      // 3.判断backtop是否显示
+      this.backTopListener(position);
     }
   }
 };
@@ -122,7 +197,7 @@ export default {
   background-color: #fff;
 }
 .content {
-  height: calc(100% - 44px);
+  height: calc(100% - 44px - 49px);
 }
 .detail-nav {
   position: relative;
