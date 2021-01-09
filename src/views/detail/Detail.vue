@@ -7,6 +7,12 @@
       :probe-type="3"
       @scroll="contentScroll"
     >
+      <ul>
+        <li v-for="(item, index) in $store.state.cartList" :key="index">
+          {{ item }}
+        </li>
+      </ul>
+
       <detail-swiper :top-images="topImages" />
       <detail-base-info :goods="goods" />
       <detail-shop-info :shop="shop" />
@@ -16,7 +22,7 @@
       <goods-list :goods="recommends" ref="recommend" />
     </scroll>
     <back-top @click.native="backClick" v-show="isShowBackTop" />
-    <detail-bottom-bar />
+    <detail-bottom-bar @addToCart="addToCart" />
   </div>
 </template>
 
@@ -61,7 +67,7 @@ export default {
   mixins: [itemListenerMixin, backTopMixin],
   data() {
     return {
-      iid: null,
+      iid: "",
       res: null,
       topImages: [],
       goods: {},
@@ -184,6 +190,19 @@ export default {
       }
       // 3.判断backtop是否显示
       this.backTopListener(position);
+    },
+    addToCart() {
+      console.log("---");
+      // 1.获取购物车需要展示的商品信息
+      const product = {};
+      product.image = this.topImages[0];
+      product.title = this.goods.title;
+      product.desc = this.goods.desc;
+      product.price = this.goods.realPrice;
+      product.iid = this.iid;
+
+      // 2.将商品加入到购物车
+      this.$store.dispatch("addToCart", product);
     }
   }
 };
